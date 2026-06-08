@@ -80,7 +80,7 @@ export default function MapScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 50 },
   headerTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   headerSub: { fontSize: 13, color: '#b7e4c7', marginTop: 2 },
   map: { flex: 1 },

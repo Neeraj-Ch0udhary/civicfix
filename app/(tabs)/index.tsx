@@ -3,9 +3,10 @@ import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { getIssues } from '../../constants/api';
 
 const STATUS_COLORS: Record<string, string> = {
-  'Reported': '#e74c3c',
-  'In Progress': '#f39c12',
-  'Resolved': '#0a1931',
+  'pending': '#e74c3c',
+  'in-progress': '#f39c12',
+  'resolved': '#1a8a4a',
+  'rejected': '#888',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -13,6 +14,10 @@ const CATEGORY_ICONS: Record<string, string> = {
   'Garbage': '🗑️',
   'Street Light': '💡',
   'Water Leak': '💧',
+  'Road': '🛣️',
+  'Water': '💧',
+  'Electricity': '⚡',
+  'Sanitation': '🧹',
   'Other': '⚠️',
 };
 
@@ -84,7 +89,7 @@ export default function FeedScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 50 },
   headerTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   headerSub: { fontSize: 13, color: '#b7e4c7', marginTop: 2 },
   card: { backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 12, elevation: 2 },

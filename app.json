@@ -14,18 +14,24 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0a1931"
-      }
+      },
+      "package": "com.smartshehar.app",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro"
     },
-    "extra": {
-      "router": {
-        "origin": false
-      }
-    },
     "experiments": {
       "tsconfigPaths": true
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6357251d-de42-4a73-aa13-d0b5eb76cdf7"
+      }
     }
   }
 }

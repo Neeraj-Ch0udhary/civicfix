@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1096125803094",
+    "project_id": "smartshehar-dc763",
+    "storage_bucket": "smartshehar-dc763.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096125803094:android:e7d6fc836a5b942f04a9f7",
+        "android_client_info": {
+          "package_name": "com.smartshehar.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKMNjz2sDGA2DttXjA7HfUfGU2EN80tD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

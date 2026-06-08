@@ -115,7 +115,7 @@ export default function ReportScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#0a1931', padding: 24, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 50 },
   title: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   subtitle: { fontSize: 14, color: '#b7e4c7', marginTop: 4 },
   photoBox: { margin: 16, borderRadius: 16, overflow: 'hidden', height: 200, backgroundColor: '#fff', elevation: 2 },
