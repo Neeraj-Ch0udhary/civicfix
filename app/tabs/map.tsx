@@ -14,7 +14,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 const STATUS_COLORS: Record<string, string> = {
   'Reported': '#e74c3c',
   'In Progress': '#f39c12',
-  'Resolved': '#2d6a4f',
+  'Resolved': '#1a8a4a',
 };
 
 export default function MapScreen() {
@@ -29,8 +29,8 @@ export default function MapScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Issues Map</Text>
-        <Text style={styles.headerSub}>{validIssues.length} issue{validIssues.length !== 1 ? 's' : ''} on map</Text>
+        <Text style={styles.headerTitle}>SmartShehar</Text>
+        <Text style={styles.headerSub}>Spot It. Report It. Fix It.</Text>
       </View>
 
       <MapView
@@ -80,7 +80,7 @@ export default function MapScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#2d6a4f', padding: 20, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 16 },
   headerTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   headerSub: { fontSize: 13, color: '#b7e4c7', marginTop: 2 },
   map: { flex: 1 },

@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { getIssues } from '../../constants/api';
 
 const STATUS_COLORS: Record<string, string> = {
   'Reported': '#e74c3c',
   'In Progress': '#f39c12',
-  'Resolved': '#2d6a4f',
+  'Resolved': '#0a1931',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -61,17 +61,17 @@ export default function FeedScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Issues Feed</Text>
-        <Text style={styles.headerSub}>{issues.length} issue{issues.length !== 1 ? 's' : ''} reported</Text>
+        <Text style={styles.headerTitle}>SmartShehar</Text>
+        <Text style={styles.headerSub}>Spot It. Report It. Fix It.</Text>
       </View>
       <FlatList
         data={issues}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2d6a4f" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0a1931" />}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>🏙️</Text>
+            <Text style={styles.emptyIcon}>📋</Text>
             <Text style={styles.emptyText}>No issues reported yet</Text>
             <Text style={styles.emptyHint}>Be the first to report an issue!</Text>
           </View>
@@ -84,7 +84,7 @@ export default function FeedScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#2d6a4f', padding: 20, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 16 },
   headerTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   headerSub: { fontSize: 13, color: '#b7e4c7', marginTop: 2 },
   card: { backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 12, elevation: 2 },

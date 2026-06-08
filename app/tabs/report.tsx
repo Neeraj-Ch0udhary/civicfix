@@ -115,7 +115,7 @@ export default function ReportScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
-  header: { backgroundColor: '#2d6a4f', padding: 24, paddingTop: 16 },
+  header: { backgroundColor: '#0a1931', padding: 24, paddingTop: 16 },
   title: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   subtitle: { fontSize: 14, color: '#b7e4c7', marginTop: 4 },
   photoBox: { margin: 16, borderRadius: 16, overflow: 'hidden', height: 200, backgroundColor: '#fff', elevation: 2 },
@@ -127,15 +127,15 @@ const styles = StyleSheet.create({
   label: { fontSize: 14, fontWeight: '700', color: '#444', marginHorizontal: 16, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 },
   categories: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 16, marginBottom: 20 },
   cat: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 24, backgroundColor: '#fff', elevation: 1 },
-  catSelected: { backgroundColor: '#2d6a4f' },
+  catSelected: { backgroundColor: '#0a1931' },
   catIcon: { fontSize: 16 },
   catText: { color: '#555', fontWeight: '500' },
   catTextSelected: { color: '#fff', fontWeight: '700' },
   input: { backgroundColor: '#fff', borderRadius: 12, padding: 14, fontSize: 15, marginHorizontal: 16, marginBottom: 16, textAlignVertical: 'top', elevation: 1, color: '#333' },
   locBtn: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: '#fff', borderRadius: 12, padding: 14, marginHorizontal: 16, marginBottom: 20, elevation: 1 },
   locIcon: { fontSize: 18 },
-  locText: { color: '#2d6a4f', fontWeight: '600', fontSize: 15 },
-  submitBtn: { backgroundColor: '#2d6a4f', borderRadius: 14, padding: 18, alignItems: 'center', marginHorizontal: 16, marginBottom: 40, elevation: 3 },
+  locText: { color: '#0a1931', fontWeight: '600', fontSize: 15 },
+  submitBtn: { backgroundColor: '#0a1931', borderRadius: 14, padding: 18, alignItems: 'center', marginHorizontal: 16, marginBottom: 40, elevation: 3 },
   submitDisabled: { backgroundColor: '#95d5b2' },
   submitText: { color: '#fff', fontSize: 16, fontWeight: 'bold', letterSpacing: 0.5 },
 });
