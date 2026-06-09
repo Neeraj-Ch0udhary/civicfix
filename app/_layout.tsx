@@ -44,7 +44,13 @@ export default function RootLayout() {
     setAuthed(true);
   };
 
-  if (!checked) return null;
+  if (!checked) return (
+  <View style={{ flex: 1, backgroundColor: '#0a1931', alignItems: 'center', justifyContent: 'center' }}>
+    <Text style={{ fontSize: 72, marginBottom: 16 }}>📍</Text>
+    <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#fff', letterSpacing: 1 }}>SmartShehar</Text>
+    <Text style={{ fontSize: 14, color: '#7a9cc0', marginTop: 8 }}>Spot It. Report It. Fix It.</Text>
+  </View>
+);
   if (authed) return <Slot />;
 
   return (

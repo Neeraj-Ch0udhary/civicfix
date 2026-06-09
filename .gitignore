@@ -43,3 +43,6 @@ app-example
 /android
 .claude
 .vscode
+CLAUDE.md
+README.md
+AGENTS.md

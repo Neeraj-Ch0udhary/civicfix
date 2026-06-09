@@ -9,9 +9,9 @@ const ROAD_COLORS: Record<string, string> = {
   West: '#9b59b6',
 };
 
-const POLL_INTERVAL = 5000; // refresh from Supabase every 5 seconds
-const MIN_GREEN = 5;        // minimum green time in seconds
-const MAX_GREEN = 30;       // maximum green time in seconds
+const POLL_INTERVAL = 5000;
+const MIN_GREEN = 5;
+const MAX_GREEN = 30;
 
 type Signal = { id: string; road: string; vehicle_count: number };
 
@@ -32,6 +32,12 @@ export default function SignalsScreen() {
   const [countdown, setCountdown] = useState(0);
   const [loading, setLoading] = useState(true);
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const greenTimesRef = useRef<Record<string, number>>({});
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    greenTimesRef.current = greenTimes;
+  }, [greenTimes]);
 
   // Fetch signals from Supabase
   const fetchSignals = async () => {
@@ -52,26 +58,26 @@ export default function SignalsScreen() {
 
   // Signal cycle logic
   useEffect(() => {
-  if (signals.length === 0 || Object.keys(greenTimes).length === 0) return;
-  
-  const current = signals[activeIdx];
-  if (!current) return;
-  
-  const duration = greenTimes[current.road] || 10;
-  setCountdown(duration);
+    if (signals.length === 0) return;
 
-  let remaining = duration;
-  const tick = setInterval(() => {
-    remaining -= 1;
-    setCountdown(remaining);
-    if (remaining <= 0) {
-      clearInterval(tick);
-      setActiveIdx(i => (i + 1) % signals.length);
-    }
-  }, 1000);
+    const current = signals[activeIdx];
+    if (!current) return;
 
-  return () => clearInterval(tick);
-}, [activeIdx]); // eslint-disable-line
+    const duration = greenTimesRef.current[current.road] || 10;
+    setCountdown(duration);
+
+    let remaining = duration;
+    const tick = setInterval(() => {
+      remaining -= 1;
+      setCountdown(remaining);
+      if (remaining <= 0) {
+        clearInterval(tick);
+        setActiveIdx(i => (i + 1) % signals.length);
+      }
+    }, 1000);
+
+    return () => clearInterval(tick);
+  }, [activeIdx, signals]);
 
   // Pulse animation for active signal
   useEffect(() => {
@@ -113,18 +119,15 @@ export default function SignalsScreen() {
             <Text style={s.roadLabel}>N</Text>
           </View>
 
-          {/* Middle row: West + road box + East */}
+          {/* Middle row */}
           <View style={s.middleRow}>
             <View style={s.roadLeft}>
               <SignalLight road="West" active={activeRoad === 'West'} pulseAnim={pulseAnim} />
               <Text style={s.roadLabel}>W</Text>
             </View>
-
-            {/* Center box */}
             <View style={s.centerBox}>
               <Text style={s.centerIcon}>✕</Text>
             </View>
-
             <View style={s.roadRight}>
               <SignalLight road="East" active={activeRoad === 'East'} pulseAnim={pulseAnim} />
               <Text style={s.roadLabel}>E</Text>
@@ -155,7 +158,7 @@ export default function SignalsScreen() {
 
       {/* Road stats */}
       <Text style={s.sectionTitle}>Vehicle Congestion</Text>
-      {signals.map((sig, idx) => {
+      {signals.map((sig) => {
         const isActive = sig.road === activeRoad;
         const pct = totalVehicles > 0 ? sig.vehicle_count / totalVehicles : 0;
         const greenTime = greenTimes[sig.road] || 0;
@@ -166,16 +169,17 @@ export default function SignalsScreen() {
               <View style={s.roadCardLeft}>
                 <View style={[s.roadDot, { backgroundColor: color }]} />
                 <Text style={s.roadName}>{sig.road} Road</Text>
-                {isActive && <View style={s.liveBadge}><Text style={s.liveBadgeText}>GREEN</Text></View>}
+                {isActive && (
+                  <View style={s.liveBadge}>
+                    <Text style={s.liveBadgeText}>GREEN</Text>
+                  </View>
+                )}
               </View>
               <Text style={s.vehicleCount}>{sig.vehicle_count} vehicles</Text>
             </View>
-
-            {/* Bar */}
             <View style={s.barBg}>
               <View style={[s.barFill, { width: `${Math.round(pct * 100)}%`, backgroundColor: color }]} />
             </View>
-
             <View style={s.roadCardBottom}>
               <Text style={s.roadCardSub}>{Math.round(pct * 100)}% of total traffic</Text>
               <Text style={[s.greenTimeText, { color }]}>🟢 {greenTime}s green time</Text>
@@ -231,14 +235,11 @@ const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f0' },
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f4f0' },
   loadingText: { fontSize: 16, color: '#888' },
-
   header: { backgroundColor: '#0a1931', padding: 20, paddingTop: 50 },
   headerTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   headerSub: { fontSize: 13, color: '#b7e4c7', marginTop: 2 },
-
   intersectionCard: { backgroundColor: '#fff', margin: 16, borderRadius: 16, padding: 16, elevation: 3 },
   intersectionTitle: { fontSize: 14, fontWeight: '700', color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16, textAlign: 'center' },
-
   intersection: { alignItems: 'center', marginBottom: 16 },
   roadTop: { alignItems: 'center', marginBottom: 8 },
   middleRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -246,13 +247,10 @@ const s = StyleSheet.create({
   roadRight: { alignItems: 'center' },
   roadBottom: { alignItems: 'center', marginTop: 8 },
   roadLabel: { fontSize: 12, fontWeight: '700', color: '#aaa', marginTop: 4 },
-
   centerBox: { width: 60, height: 60, backgroundColor: '#e8e8e8', borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   centerIcon: { fontSize: 24, color: '#bbb' },
-
   signalLight: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', elevation: 4 },
   signalIcon: { fontSize: 22 },
-
   activeInfo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: 2, borderRadius: 12, padding: 14 },
   activeInfoLeft: {},
   activeLabel: { fontSize: 11, color: '#aaa', fontWeight: '600', textTransform: 'uppercase' },
@@ -260,9 +258,7 @@ const s = StyleSheet.create({
   countdownBox: { alignItems: 'center' },
   countdown: { fontSize: 36, fontWeight: 'bold' },
   countdownLabel: { fontSize: 11, color: '#aaa' },
-
   sectionTitle: { fontSize: 12, fontWeight: '700', color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginHorizontal: 20, marginBottom: 10 },
-
   roadCard: { backgroundColor: '#fff', marginHorizontal: 16, marginBottom: 10, borderRadius: 14, padding: 14, elevation: 2, borderLeftWidth: 0, borderLeftColor: 'transparent' },
   roadCardTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
   roadCardLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
@@ -276,7 +272,6 @@ const s = StyleSheet.create({
   roadCardBottom: { flexDirection: 'row', justifyContent: 'space-between' },
   roadCardSub: { fontSize: 12, color: '#aaa' },
   greenTimeText: { fontSize: 12, fontWeight: '600' },
-
   infoCard: { backgroundColor: '#0a1931', marginHorizontal: 16, marginTop: 6, borderRadius: 16, padding: 20 },
   infoTitle: { fontSize: 16, fontWeight: 'bold', color: '#fff', marginBottom: 10 },
   infoText: { fontSize: 14, color: '#7a9cc0', lineHeight: 22 },

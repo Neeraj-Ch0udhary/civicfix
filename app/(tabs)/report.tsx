@@ -1,8 +1,8 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { useState } from 'react';
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Animated, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { submitIssue } from '../../constants/api';
 
 const CATEGORIES = [
@@ -15,6 +15,56 @@ const CATEGORIES = [
   { label: 'Sanitation', icon: '🧹' },
   { label: 'Other', icon: '⚠️' },
 ];
+
+function SuccessScreen({ onReset }: { onReset: () => void }) {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.spring(scaleAnim, { toValue: 1, friction: 5, tension: 80, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }),
+    ]).start();
+  }, []);
+
+  return (
+    <View style={s.successContainer}>
+      {/* Animated checkmark circle */}
+      <Animated.View style={[s.successCircle, { transform: [{ scale: scaleAnim }] }]}>
+        <Text style={{ fontSize: 52 }}>✅</Text>
+      </Animated.View>
+
+      <Animated.View style={{ opacity: fadeAnim, alignItems: 'center', width: '100%' }}>
+        <Text style={s.successTitle}>Report Submitted!</Text>
+        <Text style={s.successSub}>
+          City officials will review your report soon.{'\n'}Thank you for making SmartShehar better!
+        </Text>
+
+        {/* Stats row */}
+        <View style={s.successStats}>
+          <View style={s.successStat}>
+            <Text style={s.successStatIcon}>🏙️</Text>
+            <Text style={s.successStatLabel}>Logged</Text>
+          </View>
+          <View style={s.successStatDivider} />
+          <View style={s.successStat}>
+            <Text style={s.successStatIcon}>👁️</Text>
+            <Text style={s.successStatLabel}>Under Review</Text>
+          </View>
+          <View style={s.successStatDivider} />
+          <View style={s.successStat}>
+            <Text style={s.successStatIcon}>🔧</Text>
+            <Text style={s.successStatLabel}>Will Be Fixed</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={s.successBtn} onPress={onReset}>
+          <Text style={s.successBtnText}>Report Another Issue →</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
+  );
+}
 
 export default function ReportScreen() {
   const [image, setImage] = useState<string | null>(null);
@@ -58,7 +108,6 @@ export default function ReportScreen() {
       const { latitude, longitude } = loc.coords;
       setCoords({ lat: latitude, lng: longitude });
 
-      // Reverse geocode to get address
       const geo = await Location.reverseGeocodeAsync({ latitude, longitude });
       if (geo.length > 0) {
         const g = geo[0];
@@ -107,23 +156,13 @@ export default function ReportScreen() {
     setSubmitted(false);
   };
 
-  // Completion check for each step
   const step1Done = !!image;
   const step2Done = !!category;
   const step3Done = description.trim().length > 0;
   const step4Done = !!coords;
 
   if (submitted) {
-    return (
-      <View style={s.successContainer}>
-        <Text style={s.successIcon}>🎉</Text>
-        <Text style={s.successTitle}>Report Submitted!</Text>
-        <Text style={s.successSub}>City officials will review your report soon. Thank you for making SmartShehar better!</Text>
-        <TouchableOpacity style={s.successBtn} onPress={reset}>
-          <Text style={s.successBtnText}>Report Another Issue</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <SuccessScreen onReset={reset} />;
   }
 
   return (
@@ -132,7 +171,6 @@ export default function ReportScreen() {
       <View style={s.header}>
         <Text style={s.title}>Report an Issue</Text>
         <Text style={s.subtitle}>Help make your city better 🏙️</Text>
-        {/* Progress bar */}
         <View style={s.progressRow}>
           {[step1Done, step2Done, step3Done, step4Done].map((done, i) => (
             <View key={i} style={[s.progressDot, done && s.progressDotDone]} />
@@ -327,10 +365,15 @@ const s = StyleSheet.create({
   submitText: { color: '#fff', fontSize: 16, fontWeight: 'bold', letterSpacing: 0.5 },
 
   // Success
-  successContainer: { flex: 1, backgroundColor: '#f0f4f0', alignItems: 'center', justifyContent: 'center', padding: 40 },
-  successIcon: { fontSize: 72, marginBottom: 20 },
-  successTitle: { fontSize: 26, fontWeight: 'bold', color: '#0a1931', marginBottom: 12 },
+  successContainer: { flex: 1, backgroundColor: '#f0f4f0', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  successCircle: { width: 120, height: 120, borderRadius: 60, backgroundColor: '#e8f5ee', alignItems: 'center', justifyContent: 'center', marginBottom: 28, elevation: 4 },
+  successTitle: { fontSize: 28, fontWeight: 'bold', color: '#0a1931', marginBottom: 12, textAlign: 'center' },
   successSub: { fontSize: 15, color: '#777', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
-  successBtn: { backgroundColor: '#0a1931', borderRadius: 14, paddingHorizontal: 32, paddingVertical: 16 },
+  successStats: { flexDirection: 'row', backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 32, width: '100%', elevation: 2 },
+  successStat: { flex: 1, alignItems: 'center', gap: 6 },
+  successStatIcon: { fontSize: 24 },
+  successStatLabel: { fontSize: 12, fontWeight: '600', color: '#555', textAlign: 'center' },
+  successStatDivider: { width: 1, backgroundColor: '#eee', marginVertical: 4 },
+  successBtn: { backgroundColor: '#0a1931', borderRadius: 14, paddingHorizontal: 32, paddingVertical: 16, width: '100%', alignItems: 'center' },
   successBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
 });

@@ -1,50 +1,83 @@
-# Welcome to your Expo app 👋
+# 📍 SmartShehar — Admin Dashboard
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> City official control panel for SmartShehar civic app
 
-## Get started
+A React web dashboard for city administrators to manage citizen-reported issues and control adaptive traffic signal simulation in real time.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Features
 
-2. Start the app
+### 📋 Issue Management
+- View all citizen-reported issues in a sortable table
+- Filter by category (Pothole, Garbage, Street Light, etc.)
+- Filter by status (Pending / In Progress / Resolved / Rejected)
+- Search by title, description, or address
+- Click any issue to see full details including photo
+- Update issue status with one click — syncs to mobile app instantly
 
-   ```bash
-   npx expo start
-   ```
+### 🚦 Traffic Signal Control *(AI Feature)*
+- Set vehicle congestion level per road (North / South / East / West)
+- Sliders from 0–100 vehicles per road
+- Dashboard computes and previews green time allocation automatically
+- Save changes → mobile app reflects new signal timings within 5 seconds
+- Summary panel showing computed green time for all 4 roads
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🛠 Tech Stack
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 18 |
+| Backend | Supabase (PostgreSQL) |
+| Deployment | Vercel |
+| Styling | Inline CSS (no dependencies) |
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## ⚙️ Setup & Run
+
+### Prerequisites
+- Node.js 18+
+
+### Installation
 
 ```bash
-npm run reset-project
+git clone https://github.com/YOUR_USERNAME/smartshehar-admin.git
+cd smartshehar-admin
+npm install
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Deploy to Vercel
 
-## Learn more
+```bash
+npm install -g vercel
+vercel --prod
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🧠 Signal Green Time Formula
 
-## Join the community
+Green time is allocated proportionally based on vehicle count:
 
-Join our community of developers creating universal apps.
+```
+ratio = road_vehicles / total_vehicles
+green_time = 5 + ratio × 25   (min 5s, max 30s)
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Example: If North has 60 vehicles out of 100 total → 5 + 0.6×25 = **20 seconds green**
+
+---
+
+## 🔗 Related
+
+- **Mobile App** → [smartshehar](https://github.com/YOUR_USERNAME/smartshehar)
+
+---
+
+## 👨‍💻 Built for
+
+Smart India Hackathon / Internship Project — demonstrating AI-driven civic tech for Indian cities.
