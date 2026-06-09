@@ -32,7 +32,7 @@ export default function TabLayout() {
   name="signals"
   options={{
     title: 'Signals',
-    tabBarIcon: ({ color }) => <Ionicons name="stopwatch-cone" size={24} color={color} />,
+    tabBarIcon: ({ color }) => <Ionicons name="timer" size={24} color={color} />,
   }}
 />
     </Tabs>
