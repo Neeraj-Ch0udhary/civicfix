@@ -52,24 +52,26 @@ export default function SignalsScreen() {
 
   // Signal cycle logic
   useEffect(() => {
-    if (signals.length === 0) return;
-    const current = signals[activeIdx];
-    if (!current) return;
-    const duration = greenTimes[current.road] || 10;
-    setCountdown(duration);
+  if (signals.length === 0 || Object.keys(greenTimes).length === 0) return;
+  
+  const current = signals[activeIdx];
+  if (!current) return;
+  
+  const duration = greenTimes[current.road] || 10;
+  setCountdown(duration);
 
-    const tick = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          setActiveIdx(i => (i + 1) % signals.length);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  let remaining = duration;
+  const tick = setInterval(() => {
+    remaining -= 1;
+    setCountdown(remaining);
+    if (remaining <= 0) {
+      clearInterval(tick);
+      setActiveIdx(i => (i + 1) % signals.length);
+    }
+  }, 1000);
 
-    return () => clearInterval(tick);
-  }, [activeIdx, greenTimes, signals]);
+  return () => clearInterval(tick);
+}, [activeIdx]); // eslint-disable-line
 
   // Pulse animation for active signal
   useEffect(() => {
