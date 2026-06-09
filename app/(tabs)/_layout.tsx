@@ -29,12 +29,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="signals"
-        options={{
-          title: 'Signals',
-          tabBarIcon: ({ color }) => <Ionicons name="stopwatch" size={24} color={color} />,
-        }}
-      />
+  name="signals"
+  options={{
+    title: 'Signals',
+    tabBarIcon: ({ color }) => <Ionicons name="stopwatch-cone" size={24} color={color} />,
+  }}
+/>
     </Tabs>
   );
 }
