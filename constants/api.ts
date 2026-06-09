@@ -11,13 +11,13 @@ export const submitIssue = async (data: {
   latitude: number | null;
   longitude: number | null;
   photo: string | null;
+  address?: string;
 }) => {
   let photo_url = null;
 
-  // Upload photo to Supabase Storage if provided
   if (data.photo) {
     const fileName = `issue_${Date.now()}.jpg`;
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('issues')
       .upload(fileName, decode(data.photo), {
         contentType: 'image/jpeg',
@@ -34,6 +34,7 @@ export const submitIssue = async (data: {
     description: data.description,
     latitude: data.latitude,
     longitude: data.longitude,
+    address: data.address || null,
     photo_url,
     status: 'pending',
   });
@@ -41,7 +42,15 @@ export const submitIssue = async (data: {
   if (error) throw error;
 };
 
-// base64 decoder helper
+export const getIssues = async () => {
+  const { data, error } = await supabase
+    .from('issues')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+};
+
 function decode(base64: string): Uint8Array {
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
@@ -50,11 +59,19 @@ function decode(base64: string): Uint8Array {
   }
   return bytes;
 }
-export const getIssues = async () => {
+export const getSignals = async () => {
   const { data, error } = await supabase
-    .from('issues')
+    .from('signals')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('id');
   if (error) throw error;
   return data || [];
+};
+
+export const updateSignal = async (id: string, vehicle_count: number) => {
+  const { error } = await supabase
+    .from('signals')
+    .update({ vehicle_count, updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
 };

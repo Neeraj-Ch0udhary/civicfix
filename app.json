@@ -16,22 +16,18 @@
         "backgroundColor": "#0a1931"
       },
       "package": "com.smartshehar.app",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCKMNjz2sDGA2DttXjA7HfUfGU2EN80tD0"
+        }
+      }
     },
     "web": {
       "bundler": "metro"
     },
     "experiments": {
       "tsconfigPaths": true
-    },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "6357251d-de42-4a73-aa13-d0b5eb76cdf7"
-      }
     }
   }
 }
