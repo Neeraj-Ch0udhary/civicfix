@@ -120,7 +120,7 @@ Supabase credentials are in `constants/api.ts`. For production, move them to env
 ## 🔗 Related
 
 - **Admin Dashboard** → [smartshehar-admin](https://github.com/Neeraj-Ch0udhary/smartshehar-admin)
-- **Live Dashboard** → Deployed on Vercel
+- **Live Dashboard** → (https://smartshehar-admin.vercel.app/)
 
 ---
 
